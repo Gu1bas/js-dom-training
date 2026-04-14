@@ -1,1 +1,100 @@
+<!DOCTYPE html>
+ <html lang="pt-br">
+ <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+      body{
+         line-height: 2;
+      }
+    </style>
+ </head>
+ <body>
+   <h1>Mini carrinho de compras</h1>
+   <h2>Produtos:</h2>
+   
+   <div class="produto">
+      <span class="nome">Bandeja de Ovos</span> R$<span class="preco">16.00</span> <button class="add">Adicionar</button>
+   </div>
+   <div class="produto">
+      <span class="nome">Café</span> R$<span class="preco">50.00</span> <button class="add">Adicionar</button>
+   </div>
+   <div class="produto">
+      <span class="nome">Leite</span> R$<span class="preco">4.80</span> <button class="add">Adicionar</button>
+   </div>
+   <div class="produto">
+      <span class="nome">Tapioca</span> R$<span class="preco">10.00</span> <button class="add">Adicionar</button>
+   </div>
+      <hr>
+   <p>Produtos Carrinho:</p>
 
+   <ul id="listaCarrinho"></ul>  
+
+   <div id="total-container">
+      <strong>Total</strong>
+      <span>R$0,00</span>
+   </div>
+
+   <script>
+    //BOTAO PARA ADICIONAR AO CARRINHO
+    const botaoAdicionarCarrinho = document.getElementsByClassName('add');
+    for (let i = 0; i < botaoAdicionarCarrinho.length; i++) {
+        botaoAdicionarCarrinho[i].addEventListener('click', adicionarCarrinho)
+    }
+
+    //FUNCAO PARA ADICIONAR PRODUTO AO CARRINHO
+    function adicionarCarrinho(event) {
+        const button = event.target
+        const productInfos = button.parentElement
+        const nomeProduto = productInfos.getElementsByClassName('nome')[0].innerText;
+        const precoProduto = parseFloat(productInfos.getElementsByClassName('preco')[0].innerText);
+
+        const produtoMesmoNome = document.getElementsByClassName('nomeLista');
+        for (let i = 0; i < produtoMesmoNome.length; i++) {
+         if(produtoMesmoNome[i].innerText === nomeProduto) {
+            produtoMesmoNome[i].parentElement.parentElement.getElementsByClassName('qtd-itens')[0].textContent++;
+            updateTotal()
+            return;
+        }
+        }
+    
+        const novoItemLista = document.createElement('li');
+        novoItemLista.classList.add('produto')
+        novoItemLista.innerHTML = `
+            <div class="novoProduto">
+            <span class="nomeLista">${nomeProduto}</span> | R$<span class="precoLista">${precoProduto.toFixed(2)}</span> x <span class="qtd-itens">1</span> <button class="remove">Remover</button>
+            </div>
+        `
+        const lista = document.getElementById('listaCarrinho');
+        lista.append(novoItemLista);
+
+        
+        updateTotal();
+        novoItemLista.getElementsByClassName('remove')[0].addEventListener('click', buttonRemover)
+    }
+
+    //FUNCAO PARA ATUALIZAR TOTAL
+    function updateTotal() {
+      let valorTotal = 0;
+      
+      const itensLista = document.querySelectorAll('#listaCarrinho .produto');
+      for(let i = 0; i < itensLista.length; i++) {
+         const produtoPreco = itensLista[i].querySelector('.precoLista').innerText;
+         const produtoQtd = itensLista[i].querySelector('.qtd-itens').innerText;
+
+         valorTotal += (parseFloat(produtoPreco) * produtoQtd);
+      }
+
+      document.getElementById('total-container').innerHTML = `<strong>Total</strong> R$ ${valorTotal.toFixed(2)}`
+
+    }
+
+    //FUNCAO PARA REMOVER PRODUTO DO CARRINHO
+    function buttonRemover(event) {
+      event.target.parentElement.parentElement.remove()//OU EVENT.TARGET.CLOSEST('li').REMOVE()
+      updateTotal()
+    }
+   </script>
+   </body>
+ </html>
