@@ -1,6 +1,6 @@
  # JS DOM Training 🚀
 
-Coleção de projetos para prática de manipulação de DOM e lógica de programação.
+Coleção de projetos para prática de manipulação de DOM e lógica de programação. Feito em novembro de 2025
 
 ## 🛠️ Projetos Inclusos
 
