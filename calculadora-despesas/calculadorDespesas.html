@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CalculadorDespesas</title>
+    <style>
+        body{
+            background-color: #171A21;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        #container{
+            color: white;
+            background: #2A475E;
+            padding: 2rem;
+            border-radius: 10px;
+            line-height: 50px;
+        }
+        h1{
+            text-align: center;
+        }
+        input{
+            width: 100%;
+            color: white;
+            background: #171A21;
+        }
+        ::placeholder{
+            color: white;
+        }
+        button{ 
+            width: 100%;
+	        padding: 0.7rem;
+	        background-color: #007bff;
+	        color: white;
+	        border: none;
+	        border-radius: 4px;
+	        cursor: pointer;
+        }
+        ul{
+            list-style: none;
+            padding: 0;
+        }
+        li{
+            display: flex;
+            justify-content: space-between;
+	        padding: 0.5rem 0;
+	        border-bottom: 1px solid #eee;
+        }
+    </style>
+</head>
+<body>
+    <div id="container">
+        <h1>CalculadorDespesas</h1>
+        <input type="text" id="descricao" placeholder="Descrição da Despesa">
+        <input type="number" id="valor" placeholder="Valor(R$)">
+        <button id="adicionar">Adicionar</button>
+    <hr>
+    <div>
+        <label for="qtdPessoas">Quantidade de Pessoas:</label>
+        <input type="number" id="qtdPessoas" min="1" step="1" value="1">
+    </div>
+    <hr>
+    <h2>Despesas</h2>
+    <ul id="listaDespesas"></ul>
+    <hr>
+    <h3>Total: R$ <span id="total">0.00</span></h3>
+    <h3>Total por Pessoas: R$ <span id="totalPorPessoa">0.00</span></h3>
+    </div>
+
+    <script>
+        let despesas = [];
+        let total = 0;
+        let totalPorPessoa = 0;
+
+        const inputDescricao = document.getElementById('descricao');
+        const inputValor = document.getElementById('valor');
+        const aBotao = document.getElementById('adicionar');
+        const quantidadePessoas = document.getElementById('qtdPessoas');
+        const listaDespesas = document.getElementById('listaDespesas');
+        const valorTotal = document.getElementById('total');
+        const valorPorPessoa = document.getElementById('totalPorPessoa');
+
+        aBotao.addEventListener('click', () =>{
+            const descricao = inputDescricao.value;
+            const valor = parseFloat(inputValor.value);
+            const qtdPessoas = parseInt(quantidadePessoas.value);
+        
+            if(descricao && valor > 0){
+                const novaDespesa = {descricao, valor};
+                despesas.push(novaDespesa);
+
+                total += valor
+
+                const li = document.createElement('li');
+                li.innerHTML = `${descricao}. R$${valor.toFixed(2)}.`;
+                listaDespesas.appendChild(li);
+                valorTotal.textContent = total.toFixed(2);
+
+                totalPorPessoa = total / qtdPessoas;
+                valorPorPessoa.textContent = totalPorPessoa.toFixed(2);
+
+                inputDescricao.value = '';
+                inputValor.value = '';
+            }
+        });
+
+        quantidadePessoas.addEventListener('change', () =>{
+            const qtdPessoas = parseInt(quantidadePessoas.value);
+            totalPorPessoa = total / qtdPessoas;
+            valorPorPessoa.textContent = totalPorPessoa.toFixed(2);
+        });
+    </script>
+</body>
+</html>
